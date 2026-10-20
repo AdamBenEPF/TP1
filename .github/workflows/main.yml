@@ -32,8 +32,13 @@ jobs:
       - name: SonarCloud analysis
         run: >
           mvn -B verify sonar:sonar
+<<<<<<< HEAD
           -Dsonar.projectKey=AdamBenEPF_TP1
           -Dsonar.organization=adambenepf
+=======
+          -Dsonar.projectKey=TA_PROJECT_KEY
+          -Dsonar.organization=TON_ORGANIZATION_KEY
+>>>>>>> refs/remotes/origin/main
           -Dsonar.host.url=https://sonarcloud.io
           -Dsonar.token=${{ secrets.SONAR_TOKEN }}
           --file ./backend/simpleapi/pom.xml
