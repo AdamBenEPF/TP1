@@ -7,6 +7,14 @@ on:
     branches:
       - main
 
+permissions:
+  contents: write      # pousser le tag git
+  pull-requests: write # ouvrir la PR de rollback (étape 9)
+
+env:
+  # Version unique pour cette livraison : v1.0.<numéro du run>
+  VERSION: v1.0.${{ github.run_number }}
+
 jobs:
   test-main:
     # Une PR fermée sans être mergée ne déclenche rien
@@ -59,3 +67,9 @@ jobs:
           context: ./http-server
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/tp-devops-httpd:latest
           push: true
+        
+      # Même version sur le code (tag git) et sur les images
+      - name: Tag git commit
+        run: |
+          git tag "$VERSION"
+          git push origin "$VERSION"
