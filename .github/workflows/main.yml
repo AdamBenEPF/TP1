@@ -1,0 +1,29 @@
+name: CI devops 2025
+
+on:
+  push:
+    branches:
+      - main
+      - develop
+  pull_request:
+
+jobs:
+  test-backend:
+    runs-on: ubuntu-24.04
+    steps:
+      # Récupère le code du repo sur le runner
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      # Installe Java 21 + cache Maven
+      - name: Set up JDK 21
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+          cache: maven
+
+      # Compile + tests unitaires + tests d'intégration (Testcontainers)
+      - name: Build and test with Maven
+        run: mvn clean verify --file ./backend/simpleapi/pom.xml
