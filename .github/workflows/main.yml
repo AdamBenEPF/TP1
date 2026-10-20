@@ -28,6 +28,16 @@ jobs:
       - name: Build and test with Maven
         run: mvn clean verify --file ./backend/simpleapi/pom.xml
 
+      # Analyse qualité envoyée à SonarCloud
+      - name: SonarCloud analysis
+        run: >
+          mvn -B verify sonar:sonar
+          -Dsonar.projectKey=TA_PROJECT_KEY
+          -Dsonar.organization=TON_ORGANIZATION_KEY
+          -Dsonar.host.url=https://sonarcloud.io
+          -Dsonar.token=${{ secrets.SONAR_TOKEN }}
+          --file ./backend/simpleapi/pom.xml
+
   build-and-push-docker-image:
     # Attend que test-backend soit vert
     needs: test-backend
