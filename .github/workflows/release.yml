@@ -73,3 +73,33 @@ jobs:
         run: |
           git tag "$VERSION"
           git push origin "$VERSION"
+
+  deploy:
+    needs: build-and-push-docker-image
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v5
+        with:
+          ref: ${{ github.event.pull_request.merge_commit_sha }}
+
+      - name: Install Ansible
+        run: pipx install --include-deps ansible
+
+      - name: Set up SSH key
+        env:
+          SSH_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+        run: |
+          mkdir -p ~/.ssh
+          printf '%s\n' "$SSH_KEY" > ~/.ssh/deploy_key
+          chmod 600 ~/.ssh/deploy_key
+          ssh-keyscan -H adam.benlaharche.takima.school >> ~/.ssh/known_hosts
+
+      - name: Create .env from secret
+        env:
+          ENV_FILE: ${{ secrets.ENV_FILE }}
+        run: printf '%s\n' "$ENV_FILE" > .env
+
+      - name: Deploy with Ansible
+        working-directory: ansible
+        run: ansible-playbook -i inventories/setup.yml playbook.yml -e ansible_ssh_private_key_file=$HOME/.ssh/deploy_key
