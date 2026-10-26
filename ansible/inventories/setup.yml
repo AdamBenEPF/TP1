@@ -17,6 +17,8 @@ all:
     db_port: "{{ lookup('ini', 'DB_PORT', type='properties', file=env_file) }}"
     backend_host: "{{ lookup('ini', 'BACKEND_HOST', type='properties', file=env_file) }}"
     backend_port: "{{ lookup('ini', 'BACKEND_PORT', type='properties', file=env_file) }}"
+    front_host: "{{ lookup('ini', 'FRONT_HOST', type='properties', file=env_file) }}"
+    front_port: "{{ lookup('ini', 'FRONT_PORT', type='properties', file=env_file) }}"
   children:
     prod:
       hosts:

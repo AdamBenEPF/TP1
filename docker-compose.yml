@@ -31,17 +31,26 @@ services:
       retries: 5
     restart: unless-stopped
 
+  front:
+    build: ./front
+    networks:
+      - front-network
+    restart: unless-stopped
+
   httpd:
     build: ./http-server
     environment:
       BACKEND_HOST: ${BACKEND_HOST}
       BACKEND_PORT: ${BACKEND_PORT}
+      FRONT_HOST: ${FRONT_HOST}
+      FRONT_PORT: ${FRONT_PORT}
     ports:
       - "80:80"
     networks:
       - front-network
     depends_on:
       - backend
+      - front
     restart: unless-stopped
 
 networks:
