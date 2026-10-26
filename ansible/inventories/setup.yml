@@ -1,0 +1,8 @@
+all:
+  vars:
+    ansible_user: admin
+    ansible_ssh_private_key_file: /Users/adam/Documents/EPF/5A/DevOps/TP1/id_rsa
+  children:
+    prod:
+      hosts:
+        adam.benlaharche.takima.school:
