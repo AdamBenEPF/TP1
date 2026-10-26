@@ -2,55 +2,9 @@
   gather_facts: true
   become: true
 
-  tasks:
-    - name: Install required packages
-      apt:
-        name:
-          - ca-certificates
-          - curl
-          - python3
-          - python3-venv
-        state: present
-        update_cache: yes
-
-    - name: Create keyrings directory
-      file:
-        path: /etc/apt/keyrings
-        state: directory
-        mode: "0755"
-
-    - name: Add Docker GPG key
-      get_url:
-        url: https://download.docker.com/linux/debian/gpg
-        dest: /etc/apt/keyrings/docker.asc
-        mode: "0644"
-
-    - name: Add Docker APT repository
-      apt_repository:
-        repo: "deb [arch={{ 'arm64' if ansible_architecture == 'aarch64' else 'amd64' }} signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/debian {{ ansible_facts['distribution_release'] }} stable"
-        state: present
-        update_cache: yes
-
-    - name: Install Docker
-      apt:
-        name:
-          - docker-ce
-          - docker-ce-cli
-          - containerd.io
-        state: present
-
-    - name: Create a virtual environment for Docker SDK
-      command: python3 -m venv /opt/docker_venv
-      args:
-        creates: /opt/docker_venv
-
-    - name: Install Docker SDK for Python in the venv
-      pip:
-        name: docker
-        virtualenv: /opt/docker_venv
-
-    - name: Make sure Docker is running
-      service:
-        name: docker
-        state: started
-        enabled: true
+  roles:
+    - docker
+    - network
+    - database
+    - app
+    - proxy

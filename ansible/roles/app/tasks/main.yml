@@ -1,0 +1,18 @@
+- name: Run backend API
+  community.docker.docker_container:
+    name: "{{ backend_host }}"
+    image: "{{ dockerhub_user }}/tp-devops-simple-api:latest"
+    pull: true
+    restart_policy: unless-stopped
+    env:
+      DB_HOST: "{{ db_host }}"
+      DB_PORT: "{{ db_port }}"
+      POSTGRES_DB: "{{ postgres_db }}"
+      POSTGRES_USER: "{{ postgres_user }}"
+      POSTGRES_PASSWORD: "{{ postgres_password }}"
+    networks:
+      - name: "{{ back_network }}"
+      - name: "{{ front_network }}"
+  no_log: true
+  vars:
+    ansible_python_interpreter: "{{ docker_python }}"

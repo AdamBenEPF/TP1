@@ -2,6 +2,21 @@ all:
   vars:
     ansible_user: admin
     ansible_ssh_private_key_file: /Users/adam/Documents/EPF/5A/DevOps/TP1/id_rsa
+    docker_python: /opt/docker_venv/bin/python
+
+    dockerhub_user: adambenepf
+
+    front_network: front-network
+    back_network: back-network
+
+    env_file: "{{ playbook_dir }}/../.env"
+    postgres_db: "{{ lookup('ini', 'POSTGRES_DB', type='properties', file=env_file) }}"
+    postgres_user: "{{ lookup('ini', 'POSTGRES_USER', type='properties', file=env_file) }}"
+    postgres_password: "{{ lookup('ini', 'POSTGRES_PASSWORD', type='properties', file=env_file) }}"
+    db_host: "{{ lookup('ini', 'DB_HOST', type='properties', file=env_file) }}"
+    db_port: "{{ lookup('ini', 'DB_PORT', type='properties', file=env_file) }}"
+    backend_host: "{{ lookup('ini', 'BACKEND_HOST', type='properties', file=env_file) }}"
+    backend_port: "{{ lookup('ini', 'BACKEND_PORT', type='properties', file=env_file) }}"
   children:
     prod:
       hosts:
