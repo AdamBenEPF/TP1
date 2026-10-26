@@ -7,6 +7,8 @@
     env:
       BACKEND_HOST: "{{ backend_host }}"
       BACKEND_PORT: "{{ backend_port }}"
+      FRONT_HOST: "{{ front_host }}"
+      FRONT_PORT: "{{ front_port }}"
     ports:
       - "80:80"
     networks:

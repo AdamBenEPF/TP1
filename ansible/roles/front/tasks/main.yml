@@ -1,0 +1,10 @@
+- name: Run front
+  community.docker.docker_container:
+    name: "{{ front_host }}"
+    image: "{{ dockerhub_user }}/tp-devops-front:latest"
+    pull: true
+    restart_policy: unless-stopped
+    networks:
+      - name: "{{ front_network }}"
+  vars:
+    ansible_python_interpreter: "{{ docker_python }}"
